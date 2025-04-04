@@ -57,7 +57,9 @@ const Header = () => {
     // Log auth state for debugging
     useEffect(() => {
         console.log("Current auth state:", auth);
-    }, [auth]);
+        console.log("User role:", auth?.user?.role);
+        console.log("Is context loading:", isContextLoading);
+    }, [auth, isContextLoading]);
 
     // Don't render header content while loading
     if (isContextLoading) {
@@ -151,7 +153,7 @@ const Header = () => {
                                     onMouseLeave={closeDropdown}
                                 >
                                     <ul>
-                                        {!auth.user && (
+                                        {!auth?.user && (
                                             <li className="p-1 hover:bg-slate-100 rounded-md">
                                                 <Link
                                                     to="/register"
@@ -164,23 +166,25 @@ const Header = () => {
                                                 </Link>
                                             </li>
                                         )}
-                                        <li className="p-1 hover:bg-slate-100 rounded-md">
-                                            <Link
-                                                to={`${
-                                                    auth?.user?.role === 1
-                                                        ? "/admin"
-                                                        : "/user"
-                                                }/dashboard`}
-                                                className="flex items-center gap-3"
-                                            >
-                                                <AiOutlineUser className="text-[14px]" />
-                                                <span className="text-[16px]">
-                                                    My Profile
-                                                </span>
-                                            </Link>
-                                        </li>
+                                        {auth?.user && (
+                                            <li className="p-1 hover:bg-slate-100 rounded-md">
+                                                <Link
+                                                    to={`${
+                                                        auth.user.role === 1
+                                                            ? "/admin"
+                                                            : "/user"
+                                                    }/dashboard`}
+                                                    className="flex items-center gap-3"
+                                                >
+                                                    <AiOutlineUser className="text-[14px]" />
+                                                    <span className="text-[16px]">
+                                                        My Profile
+                                                    </span>
+                                                </Link>
+                                            </li>
+                                        )}
                                         {/* if user is not admin */}
-                                        {auth.user?.role !== 1 && (
+                                        {auth?.user && auth.user.role !== 1 && (
                                             <li className="p-1 hover:bg-slate-100 rounded-md">
                                                 <Link
                                                     to="/user/wishlist"
@@ -193,34 +197,34 @@ const Header = () => {
                                                 </Link>
                                             </li>
                                         )}
-                                        <li className="p-1 hover:bg-slate-100 rounded-md">
-                                            <Link
-                                                to={`${
-                                                    auth?.user?.role === 1
-                                                        ? "/admin"
-                                                        : "/user"
-                                                }/orders`}
-                                                className="flex items-center gap-3"
-                                            >
-                                                <BsBox className="text-[14px]" />
-                                                <span className="text-[16px]">
-                                                    Orders
-                                                </span>
-                                            </Link>
-                                        </li>
-
-                                        {auth.user && (
-                                            <li className="p-1 hover:bg-slate-100 rounded-md ">
+                                        {auth?.user && (
+                                            <li className="p-1 hover:bg-slate-100 rounded-md">
                                                 <Link
-                                                    onClick={handleLogout}
-                                                    to="/login"
+                                                    to={`${
+                                                        auth.user.role === 1
+                                                            ? "/admin"
+                                                            : "/user"
+                                                    }/orders`}
                                                     className="flex items-center gap-3"
                                                 >
+                                                    <BsBox className="text-[14px]" />
+                                                    <span className="text-[16px]">
+                                                        Orders
+                                                    </span>
+                                                </Link>
+                                            </li>
+                                        )}
+                                        {auth?.user && (
+                                            <li 
+                                                className="p-1 hover:bg-slate-100 rounded-md"
+                                                onClick={handleLogout}
+                                            >
+                                                <div className="flex items-center gap-3 cursor-pointer">
                                                     <MdLogout className="text-[14px]" />
                                                     <span className="text-[16px]">
                                                         Logout
                                                     </span>
-                                                </Link>
+                                                </div>
                                             </li>
                                         )}
                                     </ul>

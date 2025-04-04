@@ -10,7 +10,7 @@ const AuthProvider = ({ children }) => {
         user: null,
         token: "",
     });
-    const [isAdmin, setIsAdmin] = useState(0);
+    const [isAdmin, setIsAdmin] = useState(false);
     const [isContextLoading, setIsContextLoading] = useState(true);
 
     useEffect(() => {
@@ -30,7 +30,11 @@ const AuthProvider = ({ children }) => {
                             user: parsedData.user,
                             token: parsedData.token,
                         });
-                        setIsAdmin(parsedData.user?.role === 1);
+                        
+                        // Explicitly check if role is 1 for admin
+                        const isUserAdmin = parsedData.user.role === 1;
+                        console.log("User role:", parsedData.user.role, "Is admin:", isUserAdmin);
+                        setIsAdmin(isUserAdmin);
                     } else {
                         console.error("Invalid auth data in cookie - missing required fields");
                         Cookies.remove("auth");
@@ -56,7 +60,7 @@ const AuthProvider = ({ children }) => {
             user: null,
             token: "",
         });
-        setIsAdmin(0);
+        setIsAdmin(false);
         Cookies.remove("auth");
         toast.success("Logged out Successfully!", {
             toastId: "LogOut",

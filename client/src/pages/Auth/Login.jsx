@@ -26,11 +26,16 @@ const Login = () => {
     const navigate = useNavigate();
     useEffect(() => {
         if (auth.token) {
-            isAdmin
-                ? navigate("/admin/dashboard")
-                : navigate("/user/dashboard");
+            console.log("User is logged in, role:", auth.user?.role);
+            if (auth.user?.role === 1) {
+                console.log("Navigating to admin dashboard");
+                navigate("/admin/dashboard");
+            } else {
+                console.log("Navigating to user dashboard");
+                navigate("/user/dashboard");
+            }
         }
-    }, [navigate, auth, isAdmin]);
+    }, [navigate, auth]);
     // axios.defaults.headers.common["Authorization"] = auth.token;
 
     //form submission handler
@@ -62,15 +67,19 @@ const Login = () => {
                 }
                 
                 // Set auth state with user data
+                const userData = response.data.user;
+                const token = response.data.token;
+                
+                console.log("Setting auth state with user role:", userData.role);
                 setAuth({
-                    user: response.data.user,
-                    token: response.data.token,
+                    user: userData,
+                    token: token,
                 });
 
                 // Store auth data in cookies with proper expiration
                 const authData = {
-                    user: response.data.user,
-                    token: response.data.token,
+                    user: userData,
+                    token: token,
                 };
                 
                 console.log("Setting cookie with auth data:", authData);
@@ -80,28 +89,31 @@ const Login = () => {
                 });
                 
                 // Navigate to appropriate dashboard based on role
-                if (response.data.user.role === 1) {
+                if (userData.role === 1) {
+                    console.log("User is admin, navigating to admin dashboard");
                     navigate("/admin/dashboard");
                 } else {
+                    console.log("User is regular user, navigating to user dashboard");
                     navigate("/user/dashboard");
                 }
             }
         } catch (error) {
-            console.error("Error:", error);
+            console.error("Login error:", error);
             // invalid password
-            error.response?.status === 401 &&
-                error.response.data?.errorType === "invalidPassword" &&
+            if (error.response?.status === 401 && error.response.data?.errorType === "invalidPassword") {
                 toast.error("Wrong password!");
+            }
             //user not registered
-            error.response?.status === 401 &&
-                error.response.data?.errorType === "invalidUser" &&
+            else if (error.response?.status === 401 && error.response.data?.errorType === "invalidUser") {
                 toast.error("User not Registered!");
+            }
             //server error
-            error.response?.status === 500 &&
-                toast.error(
-                    "Something went wrong! Please try after sometime."
-                ) &&
+            else if (error.response?.status === 500) {
+                toast.error("Something went wrong! Please try after sometime.");
                 navigate("/login");
+            } else {
+                toast.error("Login failed. Please try again.");
+            }
         } finally {
             setIsSubmitting(false);
         }
