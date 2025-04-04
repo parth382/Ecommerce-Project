@@ -11,16 +11,6 @@ This is a Flipkart clone eCommerce project developed using the MERN (MongoDB, Ex
 - [Contributing](#contributing)
 - [Environment Variables](#environment-variables)
 
-## Test Users
-
-- **USER**
-  - Email: test@test.com
-  - Password: test123
-
-- **ADMIN**
-  - Email: store@flipkart.com
-  - Password: admin123
-
 ## Features
 
 - **User Authentication and Authorization:** Implemented user registration, login, and JWT-based authorization for secure access to user-specific data.
@@ -46,7 +36,7 @@ Before you begin, ensure you have met the following requirements:
 
 1. **Clone the repository:**
    ```sh
-   git clone https://github.com/aashish-dhiman/E-Commerce.git
+   git clone https://github.com/parth382/E-Commerce.git
    cd E-Commerce
    ```
 
