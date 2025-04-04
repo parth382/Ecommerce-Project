@@ -24,12 +24,16 @@ const AdminRoute = () => {
                     }
                 );
 
-                setOk(res.data.ok === true); // Update ok based on the response
+                setOk(res.data.ok === true);
+                
+                // Redirect to admin dashboard if at root admin path or profile path
+                if (location.pathname === "/admin/dashboard" || location.pathname === "/admin/profile") {
+                    navigate("/admin");
+                }
             } catch (error) {
                 console.log(error);
 
                 if (error.response?.status === 401 && !isContextLoading) {
-                    // When isContextLoading becomes false, it means the context has been loaded
                     setTimeout(() => {
                         toast.error("Admin Privileges Required!", {
                             toastId: "userNotAdmin",

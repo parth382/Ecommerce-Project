@@ -12,30 +12,57 @@ const AuthProvider = ({ children }) => {
     });
     const [isAdmin, setIsAdmin] = useState(0);
     const [isContextLoading, setIsContextLoading] = useState(true);
+
     useEffect(() => {
-        const data = Cookies.get("auth");
-        if (data) {
-            const parsedData = JSON.parse(data);
-            setAuth({
-                user: parsedData.user,
-                token: parsedData.token,
-            });
-            setIsAdmin(parsedData?.user?.role === 1);
-        }
-        setIsContextLoading(false);
+        const initializeAuth = () => {
+            try {
+                const data = Cookies.get("auth");
+                console.log("Auth cookie found:", data ? "Yes" : "No");
+                
+                if (data) {
+                    const parsedData = JSON.parse(data);
+                    console.log("Parsed auth data:", parsedData);
+                    
+                    // Validate the parsed data has the required fields
+                    if (parsedData && parsedData.user && parsedData.token) {
+                        console.log("Setting auth state from cookie");
+                        setAuth({
+                            user: parsedData.user,
+                            token: parsedData.token,
+                        });
+                        setIsAdmin(parsedData.user?.role === 1);
+                    } else {
+                        console.error("Invalid auth data in cookie - missing required fields");
+                        Cookies.remove("auth");
+                    }
+                } else {
+                    console.log("No auth cookie found");
+                }
+            } catch (error) {
+                console.error("Error initializing auth:", error);
+                // Clear invalid cookie data
+                Cookies.remove("auth");
+            } finally {
+                setIsContextLoading(false);
+            }
+        };
+
+        initializeAuth();
     }, []);
+
     //Function to Logout user
     const LogOut = () => {
         setAuth({
-            ...auth,
             user: null,
             token: "",
         });
+        setIsAdmin(0);
         Cookies.remove("auth");
         toast.success("Logged out Successfully!", {
             toastId: "LogOut",
         });
     };
+
     return (
         <AuthContext.Provider
             value={{ auth, setAuth, LogOut, isAdmin, isContextLoading }}

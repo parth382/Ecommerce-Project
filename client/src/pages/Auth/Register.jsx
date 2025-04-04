@@ -38,6 +38,7 @@ const Register = () => {
         try {
             if (password !== confirmPassword) {
                 toast.error("Password does not match!");
+                setIsSubmitting(false);
                 return;
             }
             const response = await axios.post(
@@ -51,28 +52,34 @@ const Register = () => {
                     isSeller,
                 }
             );
-            console.log(response);
 
-            // Registration successful
-            response.status === 201 &&
-                toast.success(
-                    "User Registered Successfully! Please Login..."
-                ) &&
+            if (response.data.success) {
+                toast.success("User Registered Successfully! Please Login...");
                 navigate("/login");
-
-            // Email already registered
-            response.status === 200 &&
-                toast.error("Email is already registered! Please Login...") &&
-                navigate("/login");
+            } else {
+                toast.error(response.data.message || "Registration failed!");
+            }
         } catch (error) {
             console.error("Error:", error);
-
-            //server error
-            error.response.status === 500 &&
-                toast.error(
-                    "Something went wrong! Please try after sometime."
-                ) &&
-                navigate("/register");
+            
+            if (error.response) {
+                // Email already registered
+                if (error.response.status === 200 && error.response.data.errorType === "emailConflict") {
+                    toast.error("Email is already registered! Please Login...");
+                    navigate("/login");
+                }
+                // Server error
+                else if (error.response.status === 500) {
+                    toast.error("Something went wrong! Please try after sometime.");
+                    navigate("/register");
+                }
+                // Other errors
+                else {
+                    toast.error(error.response.data.message || "Registration failed!");
+                }
+            } else {
+                toast.error("Network error! Please check your connection.");
+            }
         } finally {
             setIsSubmitting(false);
         }

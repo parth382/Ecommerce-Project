@@ -50,7 +50,7 @@ const AdminMenu = ({ toggleMenu }) => {
                     </div>
                     <div className="flex flex-col  text-black font-[300] text-[14px] mb-2 mt-0 ">
                         <NavLink
-                            to="./profile"
+                            to="/admin/dashboard/profile"
                             onClick={scrollToTop}
                             className={({ isActive }) =>
                                 isActive
@@ -64,7 +64,7 @@ const AdminMenu = ({ toggleMenu }) => {
                         </NavLink>
 
                         <NavLink
-                            to="./address"
+                            to="/admin/dashboard/address"
                             onClick={scrollToTop}
                             className={({ isActive }) =>
                                 isActive
@@ -78,7 +78,7 @@ const AdminMenu = ({ toggleMenu }) => {
                         </NavLink>
 
                         <NavLink
-                            to="./pan"
+                            to="/admin/dashboard/pan"
                             onClick={scrollToTop}
                             className={({ isActive }) =>
                                 isActive
@@ -102,7 +102,21 @@ const AdminMenu = ({ toggleMenu }) => {
                     </div>
                     <div className="flex flex-col  text-black font-[300] text-[14px] mb-2 mt-0 ">
                         <NavLink
-                            to="/admin/orders "
+                            to="/admin"
+                            onClick={scrollToTop}
+                            className={({ isActive }) =>
+                                isActive
+                                    ? "font-[600] text-primaryBlue bg-[#f1f3f5]"
+                                    : ""
+                            }
+                        >
+                            <div className=" h-[40px] px-[60px] flex items-center hover:text-primaryBlue hover:bg-[#f1f3f5]">
+                                Dashboard
+                            </div>
+                        </NavLink>
+
+                        <NavLink
+                            to="/admin/orders"
                             onClick={scrollToTop}
                             className={({ isActive }) =>
                                 isActive
@@ -116,7 +130,7 @@ const AdminMenu = ({ toggleMenu }) => {
                         </NavLink>
 
                         <NavLink
-                            to="./all-products"
+                            to="/admin/dashboard/all-products"
                             onClick={scrollToTop}
                             className={({ isActive }) =>
                                 isActive
@@ -130,7 +144,7 @@ const AdminMenu = ({ toggleMenu }) => {
                         </NavLink>
 
                         <NavLink
-                            to="./add-product"
+                            to="/admin/dashboard/add-product"
                             onClick={scrollToTop}
                             className={({ isActive }) =>
                                 isActive
@@ -144,7 +158,7 @@ const AdminMenu = ({ toggleMenu }) => {
                         </NavLink>
 
                         <NavLink
-                            to="./users"
+                            to="/admin/dashboard/users"
                             onClick={scrollToTop}
                             className={({ isActive }) =>
                                 isActive

@@ -30,6 +30,7 @@ export const loginController = async (req, res) => {
         //IF USER EXISTS-CHECKING THE PASSWORD
         const match = await comparePassword(password, user.password);
         if (!match) {
+            console.log("Password mismatch for user:", email);
             return res.status(401).send({
                 success: false,
                 message: "Invalid Password!",
@@ -59,11 +60,11 @@ export const loginController = async (req, res) => {
             token,
         });
     } catch (error) {
-        console.log("Login error: " + error);
+        console.log("Login error:", error);
         res.status(500).send({
             success: false,
             message: "Error in Login",
-            error,
+            error: error.message,
         });
     }
 };

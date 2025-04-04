@@ -49,20 +49,42 @@ const Login = () => {
                     password,
                 }
             );
-            // console.log(response);
+            console.log("Login response:", response.data);
 
             if (response.status === 200) {
                 toast.success("Logged in Successfully!");
+                
+                // Validate response data
+                if (!response.data.user || !response.data.token) {
+                    console.error("Invalid login response - missing user or token");
+                    toast.error("Login failed - invalid server response");
+                    return;
+                }
+                
+                // Set auth state with user data
                 setAuth({
-                    ...auth,
                     user: response.data.user,
                     token: response.data.token,
                 });
 
-                Cookies.set("auth", JSON.stringify(response.data), {
-                    expires: 7,
+                // Store auth data in cookies with proper expiration
+                const authData = {
+                    user: response.data.user,
+                    token: response.data.token,
+                };
+                
+                console.log("Setting cookie with auth data:", authData);
+                Cookies.set("auth", JSON.stringify(authData), {
+                    expires: 7, // 7 days
+                    path: "/", // Available across the entire site
                 });
-                navigate(location.state || "/");
+                
+                // Navigate to appropriate dashboard based on role
+                if (response.data.user.role === 1) {
+                    navigate("/admin/dashboard");
+                } else {
+                    navigate("/user/dashboard");
+                }
             }
         } catch (error) {
             console.error("Error:", error);

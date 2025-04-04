@@ -96,6 +96,13 @@ const updateProduct = async (req, res) => {
             success: true,
             updatedProduct,
         });
+
+        // You can add transformations to your image URLs
+        const transformedUrl = cloudinary.url(public_id, {
+            width: 300,
+            height: 300,
+            crop: "fill"
+        });
     } catch (error) {
         console.error("Updating Product Error: ", error);
         res.status(500).send({

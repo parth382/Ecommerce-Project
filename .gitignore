@@ -1,0 +1,74 @@
+# Dependencies
+node_modules/
+/.pnp
+.pnp.js
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env*.local
+
+# Build outputs
+/dist
+/build
+/out
+/.next
+/coverage
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Editor directories and files
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.DS_Store
+
+# Testing
+/coverage
+.nyc_output
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
+
+# Backend specific
+/backend/uploads/
+/backend/temp/
+/backend/.env
+/backend/config/config.env
+/backend/logs/
+
+# Client specific
+/client/dist/
+/client/.env
+/client/.env.local
+/client/.env.development.local
+/client/.env.test.local
+/client/.env.production.local
+
+# Database
+*.sqlite
+*.db
+
+# Misc
+.DS_Store
+Thumbs.db

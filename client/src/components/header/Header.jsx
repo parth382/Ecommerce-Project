@@ -17,7 +17,7 @@ const Header = () => {
     const [isDropdownOpen, setDropdownOpen] = useState(false);
     const headerRef = useRef(null);
 
-    const {auth, setAuth, LogOut} = useAuth();
+    const {auth, setAuth, LogOut, isContextLoading} = useAuth();
     const [cartItems, setCartItems] = useCart();
 
     let closeTimeout;
@@ -53,6 +53,17 @@ const Header = () => {
             window.removeEventListener("scroll", handleStickyHeader);
         };
     });
+
+    // Log auth state for debugging
+    useEffect(() => {
+        console.log("Current auth state:", auth);
+    }, [auth]);
+
+    // Don't render header content while loading
+    if (isContextLoading) {
+        return null;
+    }
+
     return (
         <header ref={headerRef}>
             <nav
@@ -81,26 +92,28 @@ const Header = () => {
                     {/* secondary div */}
                     <div className="flex items-center justify-between gap-[50px] w-[70%] mb-4 md:mb-0">
                         {/* home */}
-                        <div className="flex items-center group">
-                            <NavLink to="/" className="flex items-center gap-1">
-                                <BiHomeSmile className="text-[22px]" />
-                                <span className="text-[18px] hidden md:block lg:block group-hover:text-slate-700">
-                                    Home
-                                </span>
-                            </NavLink>
-                        </div>
+                        {auth?.user?.role !== 1 && (
+                            <div className="flex items-center group">
+                                <NavLink to="/" className="flex items-center gap-1">
+                                    <BiHomeSmile className="text-[22px]" />
+                                    <span className="text-[18px] hidden md:block lg:block group-hover:text-slate-700">
+                                        Home
+                                    </span>
+                                </NavLink>
+                            </div>
+                        )}
 
                         {/* Account */}
                         <div
                             className={`flex items-center relative cursor-pointer group ${
-                                auth.user
+                                auth?.user
                                     ? "hover:bg-slate-100"
                                     : "hover:bg-primaryBlue"
                             } rounded-md p-1`}
                             onMouseEnter={toggleDropdown}
                             onMouseLeave={closeDropdown}
                         >
-                            {auth.user ? (
+                            {auth?.user ? (
                                 <div className="flex items-center gap-1 ">
                                     <AiOutlineUser className="text-[22px] " />
                                     <span className="text-[18px] max-w-fit hidden md:block lg:block ">

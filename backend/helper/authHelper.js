@@ -7,13 +7,18 @@ export const hashPassword = async (password) => {
         return hashedPassword;
     } catch (error) {
         console.log(`Error in hashing password- ${error}`);
+        throw error;
     }
 };
 
 export const comparePassword = async (password, hashedPassword) => {
     try {
-        return bcrypt.compare(password, hashedPassword);
+        if (!password || !hashedPassword) {
+            return false;
+        }
+        return await bcrypt.compare(password, hashedPassword);
     } catch (error) {
         console.log(`Error in comparing password- ${error}`);
+        return false;
     }
 };

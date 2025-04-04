@@ -51,10 +51,14 @@ const Products = () => {
         const fetchFilteredData = async () => {
             try {
                 setLoading(true);
+                console.log("Fetching products with params:", {
+                    category,
+                    priceRange: [parseInt(price[0].toFixed()), parseInt(price[1].toFixed())],
+                    ratings
+                });
+                
                 const res = await axios.get(
-                    `${
-                        import.meta.env.VITE_SERVER_URL
-                    }/api/v1/product/filtered-products`,
+                    `${import.meta.env.VITE_SERVER_URL}/api/v1/product/filtered-products`,
                     {
                         params: {
                             category: category,
@@ -66,18 +70,24 @@ const Products = () => {
                         },
                     }
                 );
-                // console.log(res.data);
+                console.log("Response from server:", res.data);
 
-                res.status === 404 &&
+                if (res.status === 201) {
+                    console.log("Setting products:", res.data.products);
+                    setProducts(res.data.products);
+                    setProductsCount(res.data.products.length);
+                }
+
+                if (res.status === 404) {
                     toast.error("No Products Found!", {
                         toastId: "productNotFound",
                     });
+                }
 
-                res.status === 201 && setProducts(res.data.products);
                 setLoading(false);
-                setProductsCount(res.data.products.length);
             } catch (error) {
                 console.error("Error fetching data:", error);
+                console.error("Error response:", error.response);
                 setLoading(false);
 
                 //server error

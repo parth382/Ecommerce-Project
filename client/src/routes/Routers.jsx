@@ -47,6 +47,7 @@ const Routers = () => {
                 <Route path="wishlist" element={<Wishlist />} />
             </Route>
             <Route path="/admin" element={<AdminRoute />}>
+                <Route path="" element={<AdminDashboard />} />
                 <Route path="dashboard/*" element={<AdminDashboard />} />
                 <Route path="orders" element={<AdminOrders />} />
                 <Route
